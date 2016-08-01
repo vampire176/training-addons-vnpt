@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_employee_report_graph" model="ir.ui.view">
+            <field name="name">Employee Graph</field>
+            <field name="model">hr.employee.report</field>
+            <field name="arch" type="xml">
+                <graph string="Employee Analysis" type="pivot" stacked="True">
+                    <field name="department_id" type="row"/>
+                    <field name="create_date" interval="month" type="col"/>
+                </graph>
+            </field>
+        </record>
+        <record id="view_employee_report_search" model="ir.ui.view">
+            <field name="name">hr.employee.report.search</field>
+            <field name="model">hr.employee.report</field>
+            <field name="arch" type="xml">
+                <search string="Employee Analysis">
+                    <group expand="1" string="Group By">
+                        <filter string="Job" context="{'group_by':'job_id'}"/>
+                        <filter string="Department" context="{'group_by':'department_id'}"/>
+                        <separator/>
+                        <filter string="Month" context="{'group_by':'create_date:month'}" help="Creation Month"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_employee_report_all" model="ir.actions.act_window">
+            <field name="name">Employee Analysis</field>
+            <field name="model">hr.employee.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="context">
+                {'search_default_year':1,'search_default_month':1,'search_default_employee':1,'group_by_no_leaf':1,'group_by':[]}
+            </field>
+            <field name="search_view_id" ref="view_employee_report_search"/>
+        </record>
+
+        <menuitem action="action_employee_report_all" id="menu_employee_report_all" parent="hr.menu_hr_reporting"
+                  sequence="2" groups="base.group_hr_manager"/>
+
+    </data>
+</openerp>
